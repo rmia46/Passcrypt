@@ -4,7 +4,7 @@
 
 Passcrypt is a simple text encryption program. You enter a text, it will generate a code for that text. You can decrypt the text using the master key that you had to provide during encryption.
 
-![passcrypt ss](https://ibb.co/TYMbXrW)
+![passcrypt ss](https://i.ibb.co/hLFZ5CY/IMG-20240122-154027.jpg)
 
 
 ## Installation
