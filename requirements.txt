@@ -1,0 +1,7 @@
+# To install these libraries, run the following command in your terminal:
+# pip install -r requirements.txt
+
+rich==13.7.1
+cryptography==42.0.6
+argon2-cffi==23.1.0
+pyperclip==1.8.2
