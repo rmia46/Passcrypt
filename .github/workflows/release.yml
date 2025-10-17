@@ -27,12 +27,16 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, ubuntu-latest-arm64, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
             asset_name: passcrypt-linux-x64
             asset_path: dist/passcrypt-linux-x64
             upload_name: passcrypt-linux-x64
+          - os: ubuntu-latest-arm64
+            asset_name: passcrypt-linux-arm64
+            asset_path: dist/passcrypt-linux-arm64
+            upload_name: passcrypt-linux-arm64
           - os: windows-latest
             asset_name: passcrypt-windows
             asset_path: dist/passcrypt-windows.exe
