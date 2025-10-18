@@ -14,7 +14,7 @@ console = Console()
 
 def print_header():
     """Prints the application header."""
-    header_text = Text("PassCrypt v2.1", style="bold magenta", justify="center")
+    header_text = Text("PassCrypt v2.1.0", style="bold magenta", justify="center")
     sub_header = Text("Secure Local Password Encryption Tool", style="cyan", justify="center")
     credits_text = Text("by Gemini, in association with @rmia46", style="dim", justify="center")
     
