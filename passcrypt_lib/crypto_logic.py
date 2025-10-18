@@ -66,7 +66,10 @@ def encrypt_data(master_password: str, data_to_encrypt: dict) -> str:
 
         # 5. Encode the entire payload as a single Base64 string for easy storage
         payload_json = json.dumps(encrypted_payload)
-        return base64.b64encode(payload_json.encode('utf-8')).decode('utf-8')
+        encrypted_blob = base64.b64encode(payload_json.encode('utf-8')).decode('utf-8')
+
+        # 6. Add header and footer
+        return f"p-crypt-s-v2::{encrypted_blob}::p-crypt-e-v2"
 
     except Exception as e:
         # Re-raise a more specific exception for the UI to catch
@@ -84,25 +87,32 @@ def decrypt_data(master_password: str, encrypted_blob: str) -> dict:
         ValueError: If decryption fails due to incorrect password, tampering, or format.
     """
     try:
-        # 1. Decode the outer Base64 layer to get the JSON payload
+        # 1. Validate and strip header/footer
+        parts = encrypted_blob.split('::')
+        if len(parts) != 3 or parts[0] != 'p-crypt-s-v2' or parts[2] != 'p-crypt-e-v2':
+            raise ValueError("Invalid or corrupted data format. Expected header and footer not found.")
+        
+        encrypted_blob = parts[1]
+
+        # 2. Decode the outer Base64 layer to get the JSON payload
         payload_json = base64.b64decode(encrypted_blob).decode('utf-8')
         encrypted_payload = json.loads(payload_json)
 
-        # 2. Extract and decode all the necessary crypto parts
+        # 3. Extract and decode all the necessary crypto parts
         salt = base64.b64decode(encrypted_payload["kdf_salt_b64"])
         nonce = base64.b64decode(encrypted_payload["cipher_nonce_b64"])
         ciphertext = base64.b64decode(encrypted_payload["ciphertext_b64"])
         
         password_bytes = master_password.encode('utf-8')
 
-        # 3. Re-derive the same key using the provided salt
+        # 4. Re-derive the same key using the provided salt
         key = derive_key(password_bytes, salt)
 
-        # 4. Decrypt and authenticate the data
+        # 5. Decrypt and authenticate the data
         aesgcm = AESGCM(key)
         decrypted_bytes = aesgcm.decrypt(nonce, ciphertext, None)
 
-        # 5. Decode the plaintext and return the original dictionary
+        # 6. Decode the plaintext and return the original dictionary
         decrypted_data = json.loads(decrypted_bytes.decode('utf-8'))
         return decrypted_data
 

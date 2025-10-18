@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# PassCrypt v2.0 - Main Executable
+# PassCrypt v2.1 - Main Executable
 # A secure, local password encryption tool using modern cryptography.
 
 import argparse
